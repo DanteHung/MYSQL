@@ -1,0 +1,160 @@
+-- 1a,b,c
+
+USE SYS;
+create database BOOTCAMP_EXERCISE1;
+USE BOOTCAMP_EXERCISE1;
+
+
+CREATE TABLE LOCATIONS(
+Location_ID Int Primary key,
+Street_address varchar (150),
+Postal_code int (100),
+City varchar (150),
+State_province varchar(200),
+Country_ID varchar(50),
+is_active Boolean)
+;
+ALTER TABLE LOCATIONS
+ADD FOREIGN KEY (Country_ID) REFERENCES COUNTRIES(Country_ID);
+
+CREATE TABLE COUNTRIES(
+Country_ID Char(2) Primary key,
+Country_Name varchar(40),
+Region_ID int(50),
+is_active Boolean)
+;
+ALTER TABLE COUNTRIES
+ADD FOREIGN key (Region_ID) references REGIONS(Region_ID);
+
+CREATE TABLE DEPARTMENTS(
+Department_ID Int Primary key,
+Department_name varchar(30),
+Manager_ID int(100),
+Location_ID int(100),
+is_active Boolean)
+;
+ALTER TABLE DEPARTMENTS
+ADD FOREIGN KEY (Location_ID) references LOCATIONS(Location_ID);
+
+CREATE TABLE EMPLOYEES(
+Employee_ID Int Primary key,
+First_Name varchar(20),
+Last_Name varchar(25),
+EMAIL varchar(25),
+Phone_Number varchar(20),
+Hire_Date Date,
+Job_ID varchar(10),
+Salary decimal(65),
+Comission_PCT decimal(65),
+Manager_ID int (100),
+Department_ID int (50),
+is_active Boolean)
+;
+ALTER TABLE EMPLOYEES
+ADD FOREIGN KEY (Department_ID) references DEPARTMENTS(Department_ID);
+
+Create TABLE JOB_HISTORY(
+Employee_ID Int Primary key,
+Start_date Date,
+End_Date Date,
+Foreign key (Job_ID) references JOBS(Job_ID),
+Department_ID int (100),
+is_active Boolean);
+
+ALTER TABLE JOB_HISTORY
+ADD FOREIGN KEY (Department_ID) references DEPARTMENTS(Department_ID);
+
+Create Table JOBS(
+Job_ID Int Primary Key,
+Job_Title VarChar(10),
+Min_Salary decimal(65),
+Max_Salary decimal(65),
+is_active Boolean)
+;
+
+Create TABLE REGIONS(
+Region_ID Int Primary Key,
+Region_Name varchar (25),
+is_active Boolean)
+;
+
+Create Table Job_Grades (
+Grade_Level Char Primary Key,
+Lowest_Sal decimal(65),
+Highest_Sal decimal (65),
+not_active Boolean)
+;
+
+ 
+insert into LOCATIONS values ('1000', '1297_Via_Cola_di_Rie', '989', 'Roma', Null, 'IT', true);
+insert into LOCATIONS values ('1100', '93091_Calle_della_Te', '10934', 'Venice', Null, 'IT', true);
+insert into LOCATIONS values ('1200', '2017_Shinjuku-ku', '1689', 'Tokyo', 'Tokyo JP', Null, true);
+insert into LOCATIONS values ('1400', '2014_Jabberwocky_RD', '26192', 'Southlake', 'Texas', 'US', true);
+
+
+insert into COUNTRIES values('DE', 'Germany', '1', true);
+insert into COUNTRIES values('IT', 'Italy', '1', true);
+insert into COUNTRIES values('JP','Japan','3',true);
+insert into COUNTRIES values('US', 'United_State','2',true);
+
+insert into DEPARTMENTS values('10', 'Administration', '200', '1100', true);
+insert into DEPARTMENTS values('20', 'Marketing', '201','1200', true);
+insert into DEPARTMENTS values('30', 'Purchasing','202','1400',true);
+
+insert into EMPLOYEES values('100','Steven','King','SKING','515-1234567','1987-06-17','ST_CLERK','24000.00','0.00','109','10',true);
+insert into EMPLOYEES values('101','Neena','Kochhar','NKOCHHAR','515-1234568','1987-06-18','MK_REP','17000.00','0.00','103','20',true);
+insert into EMPLOYEES values('102','Lex,De_Haan','LDEHAAN','515-1234569','1987-06-19','IT_PROG','17000.00','0.00','108','30',true);
+insert into EMPLOYEES values('103', 'Alexander','Hunold','590-4234567','1987-06-20','MK_REP','9000.00','0.00','105','20',true);
+
+insert into JOB_HISTORY values('102','1993-01-13','1998-07-24','IT_PROG','20',true);
+insert into JOB_HISTORY values('101','1989-09-21','1993-10-27','MK_REP','10',true);
+insert into JOB_HISTORY values('101','1993-10-28','1997-03-15','MK_REP','30',true);
+insert into JOB_HISTORY values('100','1996-02-17','1999-12-19','ST_CLERK','30',true);
+insert into JOB_HISTORY values ('103', '1998-03-24','1999-12-31', 'MK_REP','20',true);
+
+-- 3. 
+SELECT Location_ID,Street_address,State_province
+FROM Countries
+Inner Join Locations
+on Countries.Country_ID = Locations.Country_ID;
+-- 4.
+SELECT First_Name,Last_Name,Department_ID
+FROM EMPLOYEES;
+
+-- 5.
+Select First_Name,Last_Name,Job_ID,Department_ID
+FROM DEPARTMENTS
+Inner Join COUNTRIES
+ON Countries.Country_ID = DEPARTMENTS.Country_ID;
+Where Country_ID = JP;
+
+-- 6.
+select Employee_Id,Last_Name,Manager_ID,Last_Name
+from EMPLOYEES;
+
+-- 7.
+Select First_Name,Last_Name,Hire_Date
+from EMPLOYEES;
+
+-- 8.
+Select Department_Name,Manage_Name,Department_ID
+From DEPATMENTS
+INNER Join EMPLOYEES
+on EMPLOYEES.Department_ID = DEPARTMENTS.Department_ID;
+
+-- 9.
+Select Employee_ID,Job_Title,Start_date, End_date
+From Job_History
+Where Start_date and End_date  BETWEEN '1990-01-01' AND '2000-01-01'
+AND Department_ID =30
+;
+
+-- 10.
+Select Department_Name, Manager_Name,City, Country_Name
+From Departments
+
+
+-- 11.
+SELECT AVG(Salary)
+From EMPLOYEES
+Where Departments_ID;
